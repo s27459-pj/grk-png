@@ -191,22 +191,41 @@ void bresenham(int i1, int j1, int i2, int j2, png_byte cr, png_byte cg, png_byt
     }
 }
 
-void red_line(int i1, int j1, int i2, int j2) {
-    bresenham(i1, j1, i2, j2, 255, 0, 0);
+void write_centered_pixel(int x, int y, png_byte cr, png_byte cg, png_byte cb) {
+    write_pixel(WIDTH / 2 + x, HEIGHT/ 2 + y, cr, cg, cb);
 }
 
-void process_file(void)
-{
-	for (y=0; y<height; y++) {
-		png_byte* row = row_pointers[y];
-		for (x=0; x<width; x++) {
-			png_byte* ptr = &(row[x*3]);
-			ptr[0] = 0;
-			ptr[1] = ptr[2] = 255;
-		}
-	}
+void write_8_pixels(int x, int y, png_byte cr, png_byte cg, png_byte cb) {
 
-	// Write initials
+    write_centered_pixel(x, y, cr, cg, cb);
+    write_centered_pixel(y, x, cr, cg, cb);
+    write_centered_pixel(x, -y, cr, cg, cb);
+    write_centered_pixel(y, -x, cr, cg, cb);
+    write_centered_pixel(-x, y, cr, cg, cb);
+    write_centered_pixel(-y, x, cr, cg, cb);
+    write_centered_pixel(-x, -y, cr, cg, cb);
+    write_centered_pixel(-y, -x, cr, cg, cb);
+}
+
+void circle(int r, png_byte cr, png_byte cg, png_byte cb) {
+    int i = 0, j = r, f = 5 - 4 * r;
+
+    write_8_pixels(i, j, cr, cg, cb);
+    while (i < j) {
+        if (f > 0) {
+            f = f + 8 * i - 8 * j + 20;
+            j--;
+        } else {
+            f = f + 8 * i + 12;
+        }
+        i++;
+        write_8_pixels(i, j, cr, cg, cb);
+    }
+}
+
+#define red_line(i1, j1, i2, j2) bresenham(i1 + 100, j1 + 130, i2 + 100, j2 + 130, 255, 0, 0)
+void draw_initials() {
+    // "S"
 	red_line(10, 100, 200, 10);
 	red_line(10, 100, 180, 190);
 	red_line(10, 300, 180, 190);
@@ -235,6 +254,21 @@ void process_file(void)
 
 	red_line(280, 155, 370, 10);
 	red_line(280, 155, 370, 320);
+}
+
+void process_file(void)
+{
+	for (y=0; y<height; y++) {
+		png_byte* row = row_pointers[y];
+		for (x=0; x<width; x++) {
+			png_byte* ptr = &(row[x*3]);
+			ptr[0] = 0;
+			ptr[1] = ptr[2] = 255;
+		}
+	}
+
+	draw_initials();
+	circle(250, 0, 0, 0);
 }
 
 
