@@ -326,9 +326,10 @@ void process_file(void)
 	}
 
 	circle(WIDTH / 2, HEIGHT / 2, 250, 0, 0, 0);
-	fill(WIDTH / 2, HEIGHT / 2, 0, 255, 128, 128, 0, 255);
+	fill(WIDTH / 2, HEIGHT / 2, 0, 255, 128, 128, 0, 255); // Circle
 	draw_initials();
-	fill(115, 235, 128, 0, 255, 0, 255, 0);
+	fill(115, 230, 128, 0, 255, 0, 255, 0); // "S"
+	fill(355, HEIGHT / 2, 128, 0, 255, 0, 255, 0); // "K"
 }
 
 
