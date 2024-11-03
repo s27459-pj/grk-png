@@ -2,3 +2,4 @@
 writepng
 compile_commands.json
 .cache/
+*.png

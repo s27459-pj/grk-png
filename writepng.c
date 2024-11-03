@@ -143,12 +143,51 @@ void bresenham(int i1, int j1, int i2, int j2, png_byte cr, png_byte cg, png_byt
     }
     else if (i2 > i1 && i2 >= i1 && i2 - i1 <= j2 - j1) {
         printf("przypadek 2\n");
+        m = 2 * (i2 - i1);
+        b = 0;
+        write_pixel(i1, j1, cr, cg, cb);
+        i = i1;
+        P = j2 - j1;
+        for (j = j1 + 1; j < j2; j++) {
+            b = b + m;
+            if (b > P) {
+                i++;
+                b = b - 2 * P;
+            }
+            write_pixel(i, j, cr, cg, cb);
+        }
     }
     else if (i2 > i1 && -j2 >= -j1 && -j2 + j1 <= i2 - i1) {
         printf("przypadek 3\n");
+        m = 2 * (-j2 + j1);
+        b = 0;
+        write_pixel(i1, j1, cr, cg, cb);
+        j = j1;
+        P = i2 - i1;
+        for (i = i1 + 1; i < i2; i++) {
+            b = b + m;
+            if (b > P) {
+                j--;
+                b = b - 2 * P;
+            }
+            write_pixel(i, j, cr, cg, cb);
+        }
     }
     else if (-j2 > -j1 && i2 >= i1 && i2 - i1 <= -j2 + j1) {
         printf("przypadek 4\n");
+        m = 2 * (i2 - i1);
+        b = 0;
+        write_pixel(i1, j1, cr, cg, cb);
+        i = i1;
+        P = -j2 + j1;
+        for (j = j1 - 1; -j < -j2; j--) {
+            b = b + m;
+            if (b > P) {
+                i++;
+                b = b - 2 * P;
+            }
+            write_pixel(i, j, cr, cg, cb);
+        }
     }
 }
 
@@ -162,7 +201,14 @@ void process_file(void)
 			ptr[1] = ptr[2] = 255;
 		}
 	}
+	// 1
    	bresenham(10, 10, 300, 100, 255, 0, 0);
+    // 2
+   	bresenham(10, 10, 100, 300, 255, 0, 0);
+    // 3
+   	bresenham(10, 100, 300, 10, 255, 0, 0);
+    // 4
+   	bresenham(10, 300, 100, 10, 255, 0, 0);
 }
 
 
