@@ -126,7 +126,6 @@ void bresenham(int i1, int j1, int i2, int j2, png_byte cr, png_byte cg, png_byt
     int m, b, j, P, i;
 
     if (j2 > j1 && j2 >= j1 && j2 - j1 <= i2 - i1) {
-        printf("przypadek 1\n");
         m = 2 * (j2 - j1);
         b = 0;
         write_pixel(i1, j1, cr, cg, cb);
@@ -142,7 +141,6 @@ void bresenham(int i1, int j1, int i2, int j2, png_byte cr, png_byte cg, png_byt
         }
     }
     else if (i2 > i1 && i2 >= i1 && i2 - i1 <= j2 - j1) {
-        printf("przypadek 2\n");
         m = 2 * (i2 - i1);
         b = 0;
         write_pixel(i1, j1, cr, cg, cb);
@@ -158,7 +156,6 @@ void bresenham(int i1, int j1, int i2, int j2, png_byte cr, png_byte cg, png_byt
         }
     }
     else if (i2 > i1 && -j2 >= -j1 && -j2 + j1 <= i2 - i1) {
-        printf("przypadek 3\n");
         m = 2 * (-j2 + j1);
         b = 0;
         write_pixel(i1, j1, cr, cg, cb);
@@ -174,7 +171,6 @@ void bresenham(int i1, int j1, int i2, int j2, png_byte cr, png_byte cg, png_byt
         }
     }
     else if (-j2 > -j1 && i2 >= i1 && i2 - i1 <= -j2 + j1) {
-        printf("przypadek 4\n");
         m = 2 * (i2 - i1);
         b = 0;
         write_pixel(i1, j1, cr, cg, cb);
@@ -225,13 +221,13 @@ void circle(int oi, int oj, int r, png_byte cr, png_byte cg, png_byte cb) {
 void draw_initials() {
     // "S"
 	red_line(10, 100, 200, 10);
-	red_line(10, 100, 180, 190);
-	red_line(10, 300, 180, 190);
+	red_line(10, 100, 180, 191); // +1 and -1 so they fully connect
+	red_line(10, 300, 180, 189);
 
 	red_line(10, 320, 10, 300);
 
-	red_line(10, 320, 210, 190);
-	red_line(40, 100, 210, 190);
+	red_line(10, 320, 210, 189);
+	red_line(40, 100, 210, 191);
 	red_line(40, 100, 200, 30);
 
 	red_line(200, 30, 200, 10);
