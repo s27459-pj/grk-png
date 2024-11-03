@@ -216,6 +216,69 @@ void circle(int oi, int oj, int r, png_byte cr, png_byte cg, png_byte cb) {
     }
 }
 
+int is_color(int x, int y, png_byte cr, png_byte cg, png_byte cb) {
+    png_byte* row = row_pointers[y];
+    png_byte* ptr = &(row[x*3]);
+    return ptr[0] == cr && ptr[1] == cg && ptr[2] == cb;
+}
+
+int is_inside(int x, int y) {
+    return x >= 0 && x < WIDTH && y >= 0 && y < HEIGHT;
+}
+
+/// Flood fill
+/// - (i, j) - starting position
+/// - (ocr, ocg, ocb) - color to be replaced
+/// - (ncr, ncg, ncb) - new color
+void fill(
+    int i, int j,
+    png_byte ocr, png_byte ocg, png_byte ocb,
+    png_byte ncr, png_byte ncg, png_byte ncb
+) {
+    // Allocate up to HEIGHT * WIDTH pixel coordinates
+    int S[HEIGHT * WIDTH][2] = { 0 };
+    int S_len = 0;
+
+    write_pixel(i, j, ncr, ncg, ncb);
+    // Push center pixel to stack
+    S[S_len][0] = i;
+    S[S_len][1] = j;
+    S_len++;
+
+    while (S_len != 0) {
+        // Pop from stack
+        S_len--;
+        i = S[S_len][0];
+        j = S[S_len][1];
+
+        // Check pixels in all directions and push to stack if they were filled
+        if (is_inside(i - 1, j) && is_color(i - 1, j, ocr, ocg, ocb)) {
+            write_pixel(i - 1, j, ncr, ncg, ncb);
+            S[S_len][0] = i - 1;
+            S[S_len][1] = j;
+            S_len++;
+        }
+        if (is_inside(i, j - 1) && is_color(i, j - 1, ocr, ocg, ocb)) {
+            write_pixel(i, j - 1, ncr, ncg, ncb);
+            S[S_len][0] = i;
+            S[S_len][1] = j - 1;
+            S_len++;
+        }
+        if (is_inside(i + 1, j) && is_color(i + 1, j, ocr, ocg, ocb)) {
+            write_pixel(i - 1, j, ncr, ncg, ncb);
+            S[S_len][0] = i + 1;
+            S[S_len][1] = j;
+            S_len++;
+        }
+        if (is_inside(i, j + 1) && is_color(i, j + 1, ocr, ocg, ocb)) {
+            write_pixel(i - 1, j, ncr, ncg, ncb);
+            S[S_len][0] = i;
+            S[S_len][1] = j + 1;
+            S_len++;
+        }
+    }
+}
+
 /// Shortcut for drawing a red line between two points with shifted coordinates
 #define red_line(i1, j1, i2, j2) bresenham(i1 + 100, j1 + 130, i2 + 100, j2 + 130, 255, 0, 0)
 void draw_initials() {
@@ -257,12 +320,15 @@ void process_file(void)
 		for (x=0; x<width; x++) {
 			png_byte* ptr = &(row[x*3]);
 			ptr[0] = 0;
-			ptr[1] = ptr[2] = 255;
+			ptr[1] = 255;
+			ptr[2] = 128;
 		}
 	}
 
-	draw_initials();
 	circle(WIDTH / 2, HEIGHT / 2, 250, 0, 0, 0);
+	fill(WIDTH / 2, HEIGHT / 2, 0, 255, 128, 128, 0, 255);
+	draw_initials();
+	fill(115, 235, 128, 0, 255, 0, 255, 0);
 }
 
 
