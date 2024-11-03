@@ -191,26 +191,23 @@ void bresenham(int i1, int j1, int i2, int j2, png_byte cr, png_byte cg, png_byt
     }
 }
 
-void write_centered_pixel(int x, int y, png_byte cr, png_byte cg, png_byte cb) {
-    write_pixel(WIDTH / 2 + x, HEIGHT/ 2 + y, cr, cg, cb);
+/// Draw 8 mirrored pixels around an origin point (oi, oj)
+void write_8_pixels(int oi, int oj, int x, int y, png_byte cr, png_byte cg, png_byte cb) {
+    write_pixel(oi + x, oj + y, cr, cg, cb);
+    write_pixel(oi + y, oj + x, cr, cg, cb);
+    write_pixel(oi + x, oj - y, cr, cg, cb);
+    write_pixel(oi + y, oj - x, cr, cg, cb);
+    write_pixel(oi - x, oj + y, cr, cg, cb);
+    write_pixel(oi - y, oj + x, cr, cg, cb);
+    write_pixel(oi - x, oj - y, cr, cg, cb);
+    write_pixel(oi - y, oj - x, cr, cg, cb);
 }
 
-void write_8_pixels(int x, int y, png_byte cr, png_byte cg, png_byte cb) {
-
-    write_centered_pixel(x, y, cr, cg, cb);
-    write_centered_pixel(y, x, cr, cg, cb);
-    write_centered_pixel(x, -y, cr, cg, cb);
-    write_centered_pixel(y, -x, cr, cg, cb);
-    write_centered_pixel(-x, y, cr, cg, cb);
-    write_centered_pixel(-y, x, cr, cg, cb);
-    write_centered_pixel(-x, -y, cr, cg, cb);
-    write_centered_pixel(-y, -x, cr, cg, cb);
-}
-
-void circle(int r, png_byte cr, png_byte cg, png_byte cb) {
+/// Draw circle with radius r around an origin point (oi, oj)
+void circle(int oi, int oj, int r, png_byte cr, png_byte cg, png_byte cb) {
     int i = 0, j = r, f = 5 - 4 * r;
 
-    write_8_pixels(i, j, cr, cg, cb);
+    write_8_pixels(oi, oj, i, j, cr, cg, cb);
     while (i < j) {
         if (f > 0) {
             f = f + 8 * i - 8 * j + 20;
@@ -219,10 +216,11 @@ void circle(int r, png_byte cr, png_byte cg, png_byte cb) {
             f = f + 8 * i + 12;
         }
         i++;
-        write_8_pixels(i, j, cr, cg, cb);
+        write_8_pixels(oi, oj, i, j, cr, cg, cb);
     }
 }
 
+/// Shortcut for drawing a red line between two points with shifted coordinates
 #define red_line(i1, j1, i2, j2) bresenham(i1 + 100, j1 + 130, i2 + 100, j2 + 130, 255, 0, 0)
 void draw_initials() {
     // "S"
@@ -268,7 +266,7 @@ void process_file(void)
 	}
 
 	draw_initials();
-	circle(250, 0, 0, 0);
+	circle(WIDTH / 2, HEIGHT / 2, 250, 0, 0, 0);
 }
 
 
