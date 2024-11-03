@@ -265,13 +265,13 @@ void fill(
             S_len++;
         }
         if (is_inside(i + 1, j) && is_color(i + 1, j, ocr, ocg, ocb)) {
-            write_pixel(i - 1, j, ncr, ncg, ncb);
+            write_pixel(i + 1, j, ncr, ncg, ncb);
             S[S_len][0] = i + 1;
             S[S_len][1] = j;
             S_len++;
         }
         if (is_inside(i, j + 1) && is_color(i, j + 1, ocr, ocg, ocb)) {
-            write_pixel(i - 1, j, ncr, ncg, ncb);
+            write_pixel(i, j + 1, ncr, ncg, ncb);
             S[S_len][0] = i;
             S[S_len][1] = j + 1;
             S_len++;
