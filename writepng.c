@@ -191,6 +191,10 @@ void bresenham(int i1, int j1, int i2, int j2, png_byte cr, png_byte cg, png_byt
     }
 }
 
+void red_line(int i1, int j1, int i2, int j2) {
+    bresenham(i1, j1, i2, j2, 255, 0, 0);
+}
+
 void process_file(void)
 {
 	for (y=0; y<height; y++) {
@@ -201,14 +205,36 @@ void process_file(void)
 			ptr[1] = ptr[2] = 255;
 		}
 	}
-	// 1
-   	bresenham(10, 10, 300, 100, 255, 0, 0);
-    // 2
-   	bresenham(10, 10, 100, 300, 255, 0, 0);
-    // 3
-   	bresenham(10, 100, 300, 10, 255, 0, 0);
-    // 4
-   	bresenham(10, 300, 100, 10, 255, 0, 0);
+
+	// Write initials
+	red_line(10, 100, 200, 10);
+	red_line(10, 100, 180, 190);
+	red_line(10, 300, 180, 190);
+
+	red_line(10, 320, 10, 300);
+
+	red_line(10, 320, 210, 190);
+	red_line(40, 100, 210, 190);
+	red_line(40, 100, 200, 30);
+
+	red_line(200, 30, 200, 10);
+
+	// "K"
+	red_line(250, 320, 250, 10);
+	red_line(250, 10, 270, 10);
+	red_line(250, 320, 270, 320);
+
+	red_line(270, 140, 270, 10);
+	red_line(270, 320, 270, 170);
+
+	red_line(270, 140, 350, 10);
+	red_line(270, 170, 350, 320);
+
+	red_line(350, 10, 370, 10);
+	red_line(350, 320, 370, 320);
+
+	red_line(280, 155, 370, 10);
+	red_line(280, 155, 370, 320);
 }
 
 
