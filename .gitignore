@@ -1,0 +1,4 @@
+*.o
+writepng
+compile_commands.json
+.cache/
